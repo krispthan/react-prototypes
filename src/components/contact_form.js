@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Field from './field';
+
 
 class ContactForm extends Component {
     constructor(props){
@@ -6,25 +8,46 @@ class ContactForm extends Component {
         this.state = {
             form:{
                 firstName :" ",
-                lastName: " "
+                lastName: " ",
+                phone: " ",
+                email: " "
             }
         }
     }
-    handleInputChange =(event) =>{   
-        console.log(evet);
+    handleInputChange =(event) => {   
+        const{value, name} = event.target;
+        const{form} = this.state;
+        form[name] = value;
+        this.setState({
+            form: {form}
+        });  
+        }
+    handleSubmit =(event) => {
+        event.preventDefault();
+        this.props.add(this.state.form);
+        console.log(this.state.form);
+    }
+    reset = () => {
+        this.setState({
+            form: {
+                firstName: " ",
+                lastName: " ",
+                phone: " ",
+                email: " "
+            }
+        });
     }
     render(){
-        const {firstName, lastName} = this.state.form
+     
+        const {firstName, lastName, phone, email} = this.state.form
         return(
-            <form>
-            <div className="form-group">
-                <label>First Name</label>
-                <input onChange={this.handleInputChange} value={firstName}  name="firstName" type="text" className="form-control"/>
-            </div>
-            <div className="form-group">
-                <label>Last Name</label>
-                <input onChange={this.handleInputChange} value={lastName} name="lastName" type="text" className="form-control"/>
-            </div>
+            <form onSubmit={this.handleSubmit}>
+            <Field name="firstName" label="First Name" type="text" value={firstName} onChange={this.handleInputChange}/>
+            <Field name="lastName" label="Last Name" type="text" value={lastName} onChange={this.handleInputChange}/>
+            <Field name="phone" label="Phone Number" type="tel" value={phone} onChange={this.handleInputChange}/>
+            <Field name="email" label="Email" type="email" value={email} onChange={this.handleInputChange}/>
+            <button>Add Contact</button>
+            <button onClick={this.reset} type="button">Clear Form</button>
         </form>
         )
     }
